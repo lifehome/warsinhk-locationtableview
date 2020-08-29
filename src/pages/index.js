@@ -13,9 +13,7 @@ const table = {
   columnDefs: [{
     headerName: "個案編號", field: "case_no", maxWidth: 120
   }, {
-    headerName: "開始日期", field: "start_date", minWidth: 120
-  }, {
-    headerName: "結束日期", field: "end_date", minWidth: 120
+    headerName: "確診日期", field: "confirmation_date", minWidth: 120
   }, {
     headerName: "動作", field: "action_zh", minWidth: 120
   }, {
@@ -33,6 +31,21 @@ const table = {
 }
 
 const IndexPage = ({data}) => {
+
+  let caseLocationData = Object.keys(data.allLocations.edges).map(key=>{
+    return data.allLocations.edges[key]["node"]
+  })
+
+  let caseHistoryData = Object.assign(...(Object.keys(data.allCases.edges).map(key=>{
+    return data.allCases.edges[key]["node"]
+  })).map(({case_no, confirmation_date})=> ({[case_no]: confirmation_date})))
+
+  let tableData = caseLocationData.map(x=>{
+    x.confirmation_date = caseHistoryData[x.case_no]
+    return x
+  })
+
+
   return (<Layout>
     <SEO title="Home" />
     <h1>wars.vote4.hk - 確診病人活動地點清單</h1>
@@ -47,13 +60,10 @@ const IndexPage = ({data}) => {
         <AgGridReact
           columnDefs={table.columnDefs}
           defaultColDef={table.defaultColDef}
-          rowData={Object.keys(data.allLocations.edges).map(key=>{
-            return data.allLocations.edges[key]["node"]
-          })}>
+          rowData={tableData}>
         </AgGridReact>
       </div>
       </main>
-
   </Layout>)
 }
 
@@ -65,11 +75,17 @@ export const pageQuery = graphql`
       edges {
         node {
           case_no
-          start_date
-          end_date
           action_zh
           sub_district_zh
           location_zh
+        }
+      }
+    }
+    allCases: allWarsCase {
+      edges {
+        node {
+          case_no
+          confirmation_date
         }
       }
     }
