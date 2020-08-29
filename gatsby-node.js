@@ -7,19 +7,29 @@
 const fetch = require("node-fetch")
 const csv2json = require("csvtojson")
 
+const PUBLISHED_SPREADSHEET_WARS_CASES_URL =
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vSr2xYotDgnAq6bqm5Nkjq9voHBKzKNWH2zvTRx5LU0jnpccWykvEF8iB_0g7Tzo2pwzkTuM3ETlr_h/pub?gid=0"
 const PUBLISHED_SPREADSHEET_WARS_CASES_LOCATION_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vT6aoKk3iHmotqb5_iHggKc_3uAA901xVzwsllmNoOpGgRZ8VAA3TSxK6XreKzg_AUQXIkVX5rqb0Mo/pub?gid=0"
 
 exports.sourceNodes = async props => {
-  createPublishedGoogleSpreadsheetNode(
-    props,
-    PUBLISHED_SPREADSHEET_WARS_CASES_LOCATION_URL,
-    "WarsCaseLocation",
-    {
-      skipFirstLine: true,
-      subtype: "default",
-    }
-  )
+  await Promise.all([
+    createPublishedGoogleSpreadsheetNode(
+      props,
+      PUBLISHED_SPREADSHEET_WARS_CASES_URL,
+      "WarsCase",
+      { skipFirstLine: true }
+    ),
+    createPublishedGoogleSpreadsheetNode(
+      props,
+      PUBLISHED_SPREADSHEET_WARS_CASES_LOCATION_URL,
+      "WarsCaseLocation",
+      {
+        skipFirstLine: true,
+        subtype: "default",
+      }
+    )
+  ])
 }
 
 const createPublishedGoogleSpreadsheetNode = async (
@@ -73,3 +83,17 @@ const createPublishedGoogleSpreadsheetNode = async (
       createTypes(typeTemplate)
     }
   }
+
+// https://www.gatsbyjs.org/docs/schema-customization/#foreign-key-fields
+exports.createSchemaCustomization = ({ actions, schema }) => {
+  const { createTypes } = actions
+  const typeDefs = [
+    `type WarsCase implements Node {
+      locations: [WarsCaseLocation] @link(by: "case_no", from: "case_no") # easy back-ref
+    }`,
+    `type WarsCaseLocation implements Node {
+      case: WarsCase @link(by: "case_no", from: "case_no")
+    }`,
+  ]
+  createTypes(typeDefs)
+}
