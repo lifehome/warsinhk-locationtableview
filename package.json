@@ -19,6 +19,8 @@
     "react-helmet": "^6.1.0"
   },
   "devDependencies": {
+    "ag-grid-community": "^23.2.1",
+    "ag-grid-react": "^23.2.1",
     "csvtojson": "^2.0.10",
     "node-fetch": "^2.6.0",
     "prettier": "2.1.0"
