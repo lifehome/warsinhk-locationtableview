@@ -3,32 +3,8 @@ import React from "react"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 
-// ag-grid import
-import { AgGridReact } from 'ag-grid-react'
-
-import 'ag-grid-community/dist/styles/ag-grid.css'
-import 'ag-grid-community/dist/styles/ag-theme-alpine.css'
-
-const table = {
-  columnDefs: [{
-    headerName: "個案編號", field: "case_no", maxWidth: 120
-  }, {
-    headerName: "確診日期", field: "confirmation_date", minWidth: 120
-  }, {
-    headerName: "動作", field: "action_zh", minWidth: 120
-  }, {
-    headerName: "分區", field: "sub_district_zh", minWidth: 140
-  }, {
-    headerName: "地點", field: "location_zh", minWidth: 380
-  }],
-  defaultColDef: {
-    flex: 1,
-    sortable: true,
-    editable: true,
-    filter: true,
-    floatingFilter: true,
-  }
-}
+// react-table
+import { useTable } from 'react-table'
 
 const IndexPage = ({data}) => {
 
@@ -40,30 +16,60 @@ const IndexPage = ({data}) => {
     return data.allCases.edges[key]["node"]
   })).map(({case_no, confirmation_date})=> ({[case_no]: confirmation_date})))
 
+  let tableColumns = [{
+    Header: "個案編號", accessor: "case_no"
+  }, {
+    Header: "確診日期", accessor: "confirmation_date"
+  }, {
+    Header: "動作", accessor: "action_zh"
+  }, {
+    Header: "分區", accessor: "sub_district_zh"
+  }, {
+    Header: "地點", accessor: "location_zh"
+  }]
+
   let tableData = caseLocationData.map(x=>{
     x.confirmation_date = caseHistoryData[x.case_no]
     return x
   })
 
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow
+  } = useTable({ tableColumns, tableData });
 
   return (<Layout>
     <SEO title="Home" />
     <h1>wars.vote4.hk - 確診病人活動地點清單</h1>
 
-    <main style={{ width: "100%", height: "100%" }}>
-    <div
-        className="ag-theme-alpine"
-        style={{
-        height: '70vh',
-        width: '960px' }}
-      >
-        <AgGridReact
-          columnDefs={table.columnDefs}
-          defaultColDef={table.defaultColDef}
-          rowData={tableData}>
-        </AgGridReact>
-      </div>
-      </main>
+    <main>
+      <table {...getTableProps()}>
+        <thead>
+          {headerGroups.map(headerGroup => (
+            <tr {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map(column => (
+                <th {...column.getHeaderProps()}>{column.render("Header")}</th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody {...getTableBodyProps()}>
+          {rows.map((row, i) => {
+            prepareRow(row);
+            return (
+              <tr {...row.getRowProps()}>
+                {row.cells.map(cell => {
+                  return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>;
+                })}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </main>
   </Layout>)
 }
 
