@@ -4,7 +4,10 @@ import Layout from "../components/layout"
 import SEO from "../components/seo"
 
 // react-table
-import { useTable } from 'react-table'
+import { useTable } from "react-table"
+
+// Bootstrap imports
+import { Table } from "react-bootstrap"
 
 const IndexPage = ({data}) => {
 
@@ -39,20 +42,23 @@ const IndexPage = ({data}) => {
     headerGroups,
     rows,
     prepareRow
-  } = useTable({ tableColumns, tableData });
+  } = useTable({tableColumns, tableData});
 
   return (<Layout>
     <SEO title="Home" />
     <h1>wars.vote4.hk - 確診病人活動地點清單</h1>
 
     <main>
-      <table {...getTableProps()}>
+      <Table bordered {...getTableProps()}>
         <thead>
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map(column => (
-                <th {...column.getHeaderProps()}>{column.render("Header")}</th>
-              ))}
+              {headerGroup.headers.map(column => {
+                const {render, getHeaderProps} = column
+                return (
+                  <th {...getHeaderProps()}>{render("Header")}</th>
+                )
+              })}
             </tr>
           ))}
         </thead>
@@ -68,7 +74,7 @@ const IndexPage = ({data}) => {
             );
           })}
         </tbody>
-      </table>
+      </Table>
     </main>
   </Layout>)
 }
