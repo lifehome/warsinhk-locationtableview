@@ -65,7 +65,7 @@ const IndexPage = ({data}) => {
   let tableConfigurations = {
     layout: "fitDataStretch",
     pagination: "local",
-    paginationSizeSelector: [10, 20, 25, 50, 100, 200, 500, 1000, true], 
+    paginationSizeSelector: [10, 20, 25, 50, 100], 
     paginationSize: 10,
     columnMinWidth: 189,
     placeholder: "查無資料。"
@@ -78,7 +78,6 @@ const IndexPage = ({data}) => {
       <ReactTabulator
         data={tableData}
         columns={tableColumns}
-        tooltips={true}
         layout={"fitData"}
         options={tableConfigurations}
         class="table-sm"

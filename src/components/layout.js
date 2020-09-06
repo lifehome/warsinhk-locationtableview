@@ -23,7 +23,7 @@ const Layout = ({ children }) => {
         }}
       >
         <main>{children}</main>
-        <footer>
+        <footer style={{ textAlign: "center", padding: "21px 0 0 0" }}>
           資料以 CC-BY-SA 4.0 授權取自 <a href="https://wars.vote4.hk" target="_blank">wars.vote4.hk 武漢肺炎民間資訊</a>
         </footer>
       </div>
