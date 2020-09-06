@@ -35,6 +35,14 @@ export default class IndexPage extends React.Component {
       }
     `
 
+    const SmallScreenAlert = styled(Alert)`
+      @media (min-width: 1200px){
+        &&& {
+          display: none
+        }
+      }
+    `
+
     // Popping data from GraphQL queries
     let caseLocationData = Object.keys(data.allLocations.edges).map(key=>{
       return data.allLocations.edges[key]["node"]
@@ -136,6 +144,9 @@ export default class IndexPage extends React.Component {
       <SEO title="病患行蹤清單" />
 
       <Container style={{minHeight: "75vh", fontFamily: "san-serif" }}>
+        <SmallScreenAlert variant="warning">
+          <strong>注意！</strong>由於表格會顯示較多資料，建議使用較大的螢幕閱讀。
+        </SmallScreenAlert>
         <Alert variant="info">
           <strong>你知道嗎？</strong>你可以按住 Shift 鍵來多重排序欄位！
         </Alert>
