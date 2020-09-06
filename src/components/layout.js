@@ -20,6 +20,7 @@ const Layout = ({ children }) => {
           margin: `0 auto`,
           maxWidth: 1280,
           padding: `0 1.0875rem 1.45rem`,
+          fontFamily: `sans-serif`
         }}
       >
         <main>{children}</main>
