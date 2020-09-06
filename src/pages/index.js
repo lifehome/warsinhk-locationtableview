@@ -14,7 +14,8 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import { Alert, Container } from "react-bootstrap"
 
 // moment.js
-import { moment } from "moment"
+import moment from "moment"
+window.moment = moment // dangerously set moment object to window
 
 // custom components
 const TabulatorTable = styled(ReactTabulator)`
