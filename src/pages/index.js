@@ -16,14 +16,6 @@ import { Alert, Container } from "react-bootstrap"
 // moment.js
 import moment from "moment"
 
-// custom components
-const TabulatorTable = styled(ReactTabulator)`
-  div.tabulator-header-filter > input[type=search] {
-    border: 1px solid rgba(0,0,0,.13);
-    border-radius: 3px
-  }
-`
-
 export default class IndexPage extends React.Component {
   componentDidMount() {
     window.moment = moment
@@ -31,6 +23,14 @@ export default class IndexPage extends React.Component {
 
   render(){
     let data = this.props.data
+
+    // custom components
+    const TabulatorTable = styled(ReactTabulator)`
+      div.tabulator-header-filter > input[type=search] {
+        border: 1px solid rgba(0,0,0,.13);
+        border-radius: 3px
+      }
+    `
 
     let caseLocationData = Object.keys(data.allLocations.edges).map(key=>{
       return data.allLocations.edges[key]["node"]
