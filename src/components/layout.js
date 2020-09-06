@@ -24,7 +24,7 @@ const Layout = ({ children }) => {
       >
         <main>{children}</main>
         <footer style={{ textAlign: "center", paddingTop: "21px", marginTop: "13px", borderTop: "1px solid rgba(0,0,0,.34)" }}>
-          資料以 CC-BY-SA 4.0 授權取自 <a href="https://wars.vote4.hk" target="_blank" rel="noreferrer">wars.vote4.hk 武漢肺炎民間資訊</a>
+          資料以 CC-BY-SA 4.0 授權取自 <a href="https://wars.vote4.hk">wars.vote4.hk 武漢肺炎民間資訊</a>
         </footer>
       </div>
     </>
