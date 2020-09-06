@@ -1,6 +1,6 @@
 import React from "react"
 import styled from "styled-components"
-import { graphql } from "gatsby"
+import { graphql, Link } from "gatsby"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
@@ -11,7 +11,7 @@ import { ReactTabulator } from 'react-tabulator'
 
 // Bootstrap imports
 import "bootstrap/dist/css/bootstrap.min.css"
-import { Alert, Container } from "react-bootstrap"
+import { Alert, Button, Container } from "react-bootstrap"
 
 // moment.js
 import moment from "moment"
@@ -20,6 +20,11 @@ export default class IndexPage extends React.Component {
   // Mount components to window
   componentDidMount() {
     window.moment = moment
+  }
+
+  // custom function
+  downloadSheetResult = ()=>{
+    this.ref.table.download("csv", "result.csv")
   }
 
   // Process all the messy stuff here
@@ -134,9 +139,11 @@ export default class IndexPage extends React.Component {
         }
       },
       pagination: "local",
-      paginationSizeSelector: [10, 20, 25, 50, 100], 
+      paginationSizeSelector: [10, 20, 25, 50, 100, true], 
       paginationSize: 10,
-      placeholder: "查無資料。"
+      placeholder: "查無資料。",
+      downloadDataFormatter: (data) => data,
+      downloadReady: (fileContents, blob) => blob
     }
 
     // Final render components
@@ -150,7 +157,13 @@ export default class IndexPage extends React.Component {
         <Alert variant="info">
           <strong>你知道嗎？</strong>你可以按住 Shift 鍵來多重排序欄位！
         </Alert>
+        <div className="float-right" style={{ padding: "0 0 13px"}}>
+          <Link as={Button} className="btn btn-sm btn-info" href="https://docs.google.com/spreadsheets/d/e/2PACX-1vT6aoKk3iHmotqb5_iHggKc_3uAA901xVzwsllmNoOpGgRZ8VAA3TSxK6XreKzg_AUQXIkVX5rqb0Mo/pub?gid=0&range=A2:ZZ&output=csv">下載表格原始資料</Link>
+          {' '}
+          <Button variant="success" className="btn-sm" onClick={this.downloadSheetResult}>下載表格搜尋結果</Button>
+        </div>
         <TabulatorTable
+          ref={ref => (this.ref = ref)}
           data={tableData}
           columns={tableColumns}
           layout={"fitData"}
