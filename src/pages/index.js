@@ -1,4 +1,5 @@
 import React from "react"
+import styled from "styled-components"
 import { graphql } from "gatsby"
 
 import Layout from "../components/layout"
@@ -10,10 +11,18 @@ import { ReactTabulator } from 'react-tabulator'
 
 // Bootstrap imports
 import "bootstrap/dist/css/bootstrap.min.css"
-import { Alert, Container, Table } from "react-bootstrap"
+import { Alert, Container } from "react-bootstrap"
 
 // moment.js
 import { moment } from "moment"
+
+// custom components
+const TabulatorTable = styled(ReactTabulator)`
+  div.tabulator-header-filter > input[type=search] {
+    border: 1px solid rgba(0,0,0,.13);
+    border-radius: 3px
+  }
+`
 
 const IndexPage = ({data}) => {
 
@@ -23,7 +32,7 @@ const IndexPage = ({data}) => {
 
   let caseHistoryData = Object.assign(...(Object.keys(data.allCases.edges).map(key=>{
     return data.allCases.edges[key]["node"]
-  })).map(({case_no, confirmation_date})=> ({[case_no]: confirmation_date})))
+  })).map(({case_no, confirmation_date}) => ({[case_no]: confirmation_date})))
 
   let tableColumns = [{
     title: "個案編號", field: "case_no", width: 121,
@@ -116,13 +125,12 @@ const IndexPage = ({data}) => {
       <Alert variant="info">
         <strong>你知道嗎？</strong>你可以按住 Shift 鍵來多重排序欄位！
       </Alert>
-      <ReactTabulator
-        as={Table}
+      <TabulatorTable
         data={tableData}
         columns={tableColumns}
         layout={"fitData"}
         options={tableConfigurations}
-        className="table-sm"
+        className="table-sm" // Bootstrap table fix
       />
     </Container>
   </Layout>)
