@@ -17,11 +17,14 @@ import { Alert, Container } from "react-bootstrap"
 import moment from "moment"
 
 export default class IndexPage extends React.Component {
+  // Mount components to window
   componentDidMount() {
     window.moment = moment
   }
 
+  // Process all the messy stuff here
   render(){
+    // Load data from props
     let data = this.props.data
 
     // custom components
@@ -32,14 +35,17 @@ export default class IndexPage extends React.Component {
       }
     `
 
+    // Popping data from GraphQL queries
     let caseLocationData = Object.keys(data.allLocations.edges).map(key=>{
       return data.allLocations.edges[key]["node"]
     }).filter(x => x.case_no !== "-" && x.case_no.trim() !== "")
 
+    // Popping and insert data from GraphQL queries
     let caseHistoryData = Object.assign(...(Object.keys(data.allCases.edges).map(key=>{
       return data.allCases.edges[key]["node"]
     })).map(({case_no, confirmation_date}) => ({[case_no]: confirmation_date})))
 
+    // Table column definitions
     let tableColumns = [{
       title: "個案編號", field: "case_no", width: 121,
       headerFilter: "input", headerFilterPlaceholder: "個案編號..."
@@ -80,7 +86,8 @@ export default class IndexPage extends React.Component {
       x.confirmation_date = caseHistoryData[x.case_no]
       return x
     })
-
+    
+    // Table display configurations
     let tableConfigurations = {
       layout: "fitDataStretch",
       locale: true,
@@ -124,6 +131,7 @@ export default class IndexPage extends React.Component {
       placeholder: "查無資料。"
     }
 
+    // Final render components
     return (<Layout>
       <SEO title="病患行蹤清單" />
 
