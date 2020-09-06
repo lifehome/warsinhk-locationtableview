@@ -7,37 +7,24 @@
 
 import React from "react"
 import PropTypes from "prop-types"
-import { useStaticQuery, graphql } from "gatsby"
 
 import Header from "./header"
 import "./layout.css"
 
 const Layout = ({ children }) => {
-  const data = useStaticQuery(graphql`
-    query SiteTitleQuery {
-      site {
-        siteMetadata {
-          title
-        }
-      }
-    }
-  `)
-
   return (
     <>
-      <Header siteTitle={data.site.siteMetadata.title} />
+      <Header siteTitle="🤒武漢肺炎民間資訊😷 - 病患行蹤清單" />
       <div
         style={{
           margin: `0 auto`,
-          maxWidth: 960,
+          maxWidth: 1280,
           padding: `0 1.0875rem 1.45rem`,
         }}
       >
         <main>{children}</main>
         <footer>
-          © {new Date().getFullYear()}, Built with
-          {` `}
-          <a href="https://www.gatsbyjs.org">Gatsby</a>
+          資料以 CC-BY-SA 4.0 授權取自 <a href="https://wars.vote4.hk" target="_blank">wars.vote4.hk 武漢肺炎民間資訊</a>
         </footer>
       </div>
     </>

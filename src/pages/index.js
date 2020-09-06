@@ -1,34 +1,60 @@
 import React from "react"
+import { graphql } from "gatsby"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 
-// react-table
-import { useTable } from "react-table"
+// react-base-table
+import "react-tabulator/lib/styles.css"
+import "react-tabulator/lib/css/bootstrap/tabulator_bootstrap4.min.css"
+import { ReactTabulator } from 'react-tabulator'
 
 // Bootstrap imports
-import { Table } from "react-bootstrap"
+import { Container } from "react-bootstrap"
+
+// moment.js
+import { moment } from "moment"
 
 const IndexPage = ({data}) => {
 
   let caseLocationData = Object.keys(data.allLocations.edges).map(key=>{
     return data.allLocations.edges[key]["node"]
-  })
+  }).filter(x => x.case_no !== "-" && x.case_no.trim() !== "")
 
   let caseHistoryData = Object.assign(...(Object.keys(data.allCases.edges).map(key=>{
     return data.allCases.edges[key]["node"]
   })).map(({case_no, confirmation_date})=> ({[case_no]: confirmation_date})))
 
   let tableColumns = [{
-    Header: "個案編號", accessor: "case_no"
+    title: "個案編號", field: "case_no",
+    headerFilter: "input", headerFilterPlaceholder: "個案編號..."
   }, {
-    Header: "確診日期", accessor: "confirmation_date"
+    title: "確診日期", field: "confirmation_date",
+    headerFilter: "input", headerFilterPlaceholder: "日期...",
+    sorter: "date", sorterParams:{format:"YYYY-MM-DD"}
   }, {
-    Header: "動作", accessor: "action_zh"
+    title: "動作", field: "action_zh",
+    headerFilter: "select", headerFilterPlaceholder: "動作...", headerFilterParams: { values: {
+      "": '所有動作',
+      "交通": "交通",
+      "住宿": "住宿",
+      "家居檢疫": "家居檢疫",
+      "工作": "工作",
+      "抵港": "抵港",
+      "指定診所": "指定診所",
+      "檢疫中心": "檢疫中心",
+      "求醫": "求醫",
+      "聚會": "聚會",
+      "聚餐": "聚餐",
+      "逗留": "逗留",
+      "離港": "離港"
+    }}
   }, {
-    Header: "分區", accessor: "sub_district_zh"
+    title: "分區", field: "sub_district_zh",
+    headerFilter: "input", headerFilterPlaceholder: "18 區..."
   }, {
-    Header: "地點", accessor: "location_zh"
+    title: "地點", field: "location_zh",
+    headerFilter: "input", headerFilterPlaceholder: "關鍵字..."
   }]
 
   let tableData = caseLocationData.map(x=>{
@@ -36,46 +62,28 @@ const IndexPage = ({data}) => {
     return x
   })
 
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow
-  } = useTable({tableColumns, tableData});
+  let tableConfigurations = {
+    layout: "fitDataStretch",
+    pagination: "local",
+    paginationSizeSelector: [10, 20, 25, 50, 100, 200, 500, 1000, true], 
+    paginationSize: 10,
+    columnMinWidth: 189,
+    placeholder: "查無資料。"
+  }
 
   return (<Layout>
-    <SEO title="Home" />
-    <h1>wars.vote4.hk - 確診病人活動地點清單</h1>
+    <SEO title="病患行蹤清單" />
 
-    <main>
-      <Table bordered {...getTableProps()}>
-        <thead>
-          {headerGroups.map(headerGroup => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map(column => {
-                const {render, getHeaderProps} = column
-                return (
-                  <th {...getHeaderProps()}>{render("Header")}</th>
-                )
-              })}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.map((row, i) => {
-            prepareRow(row);
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map(cell => {
-                  return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>;
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </Table>
-    </main>
+    <Container style={{minHeight: "70vh", fontFamily: "san-serif" }}>
+      <ReactTabulator
+        data={tableData}
+        columns={tableColumns}
+        tooltips={true}
+        layout={"fitData"}
+        options={tableConfigurations}
+        class="table-sm"
+      />
+    </Container>
   </Layout>)
 }
 
