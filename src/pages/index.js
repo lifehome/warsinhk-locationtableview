@@ -124,7 +124,7 @@ export default class IndexPage extends React.Component {
           "prev_title": "上一頁",
           "next": ">",
           "next_title": "下一頁",
-          "all": "顯示所有資料",
+          "all": "所有資料",
       },
       "headerFilters":{
           "default": "關鍵字...", //default header filter placeholder text
