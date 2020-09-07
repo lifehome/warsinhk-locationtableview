@@ -58,6 +58,12 @@ export default class IndexPage extends React.Component {
       return data.allCases.edges[key]["node"]
     })).map(({case_no, confirmation_date}) => ({[case_no]: confirmation_date})))
 
+    // Table data mutation
+    let tableData = caseLocationData.map(x=>{
+      x.confirmation_date = caseHistoryData[x.case_no]
+      return x
+    })
+
     // Table column definitions
     let tableColumns = [{
       title: "個案編號", field: "case_no", width: 121,
@@ -94,11 +100,6 @@ export default class IndexPage extends React.Component {
       title: "地點", field: "location_zh",
       headerFilter: "input", headerFilterPlaceholder: "關鍵字..."
     }]
-
-    let tableData = caseLocationData.map(x=>{
-      x.confirmation_date = caseHistoryData[x.case_no]
-      return x
-    })
 
     // Table display translations
     let overridenLocaleStrings = {
