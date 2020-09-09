@@ -23,6 +23,9 @@
     "react-tabulator": "^0.13.2",
     "styled-components": "^5.1.1"
   },
+  "resolutions": {
+    "react-tabulator/tabulator-tables": "^4.8.0"
+  },
   "keywords": [
     "gatsby"
   ],
