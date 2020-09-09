@@ -33,18 +33,23 @@ export default class IndexPage extends React.Component {
     let data = this.props.data
 
     // custom components
+    const MainContainer = styled(Container)`
+      &&& {
+        @media(min-width: 1000px){
+          div#SmallScreenAlert {
+            display:none
+          }
+        }
+
+        margin: 0;
+        display: inline-block;
+      }
+    `
+
     const TabulatorTable = styled(ReactTabulator)`
       div.tabulator-header-filter > input[type=search] {
         border: 1px solid rgba(0,0,0,.13);
         border-radius: 3px
-      }
-    `
-
-    const SmallScreenAlert = styled(Alert)`
-      @media (min-width: 1200px){
-        &&& {
-          display: none
-        }
       }
     `
 
@@ -77,7 +82,7 @@ export default class IndexPage extends React.Component {
       headerFilter: "input", headerFilterPlaceholder: "日期...",
       sorter: "date", sorterParams:{format:"YYYY-MM-DD"}
     },  {
-      title: "動作", field: "action_zh", width: 121, 
+      title: "動作", field: "action_zh", width: 121, responsive: 998, 
       headerFilter: "select", headerFilterPlaceholder: "動作...", headerFilterParams: { values: {
         "": '所有動作',
         "交通": "交通",
@@ -94,10 +99,10 @@ export default class IndexPage extends React.Component {
         "離港": "離港"
       }}
     }, {
-      title: "分區", field: "sub_district_zh", width: 121, 
+      title: "分區", field: "sub_district_zh", width: 121, responsive: 999, 
       headerFilter: "input", headerFilterPlaceholder: "18 區..."
     }, {
-      title: "地點", field: "location_zh",
+      title: "地點", field: "location_zh", width: 300,
       headerFilter: "input", headerFilterPlaceholder: "關鍵字..."
     }]
 
@@ -148,17 +153,18 @@ export default class IndexPage extends React.Component {
       paginationSizeSelector: [10, 20, 25, 50, 100, true], 
       paginationSize: 10,
       placeholder: "查無資料。",
-      downloadReady: (fileContents, blob) => blob
+      downloadReady: (fileContents, blob) => blob,
+      responsiveLayout: "hide"
     }
 
     // Final render components
     return (<Layout>
       <SEO title="病患行蹤清單" />
 
-      <Container style={{minHeight: "75vh", fontFamily: "san-serif" }}>
-        <SmallScreenAlert variant="warning">
+      <MainContainer fluid style={{minHeight: "75vh", fontFamily: "san-serif" }}>
+        <Alert variant="warning" id="SmallScreenAlert">
           <strong>注意！</strong>由於表格會顯示較多資料，建議使用較大的螢幕閱讀。
-        </SmallScreenAlert>
+        </Alert>
         <Alert variant="info">
           <strong>你知道嗎？</strong>你可以按住 Shift 鍵來多重排序欄位！
         </Alert>
@@ -175,7 +181,7 @@ export default class IndexPage extends React.Component {
           options={tableConfigurations}
           className="table-sm" // Bootstrap table fix
         />
-      </Container>
+      </MainContainer>
     </Layout>)
   }
 }
