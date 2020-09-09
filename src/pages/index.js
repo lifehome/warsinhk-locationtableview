@@ -24,7 +24,7 @@ export default class IndexPage extends React.Component {
 
   // custom function
   downloadSheetResult = ()=>{
-    this.ref.table.download("csv", "result.csv")
+    this.ref.table.download("csv", "result.csv", {}, "active")
   }
 
   // Process all the messy stuff here
