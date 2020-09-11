@@ -23,8 +23,20 @@ export default class IndexPage extends React.Component {
   }
 
   // custom function
-  downloadSheetResult = ()=>{
+  downloadSheetCSVResult = ()=>{
+    // tabulator 4.7 override function
+    this.ref.table.setPageSize(this.ref.table.getPageSize())
+
+    // actually download the csv
     this.ref.table.download("csv", "result.csv", {}, "active")
+  }
+
+  downloadSheetXLSXResult = ()=>{
+    // tabulator 4.7 override function
+    this.ref.table.setPageSize(this.ref.table.getPageSize())
+
+    // actually download the xlsx
+    this.ref.table.download("xlsx", "result.xlsx", {sheetName:"FilteredResult"}, "active")
   }
 
   // Process all the messy stuff here
@@ -171,7 +183,9 @@ export default class IndexPage extends React.Component {
         <div className="float-right" style={{ padding: "0 0 13px"}}>
           <a as={Button} className="btn btn-sm btn-info" href="https://docs.google.com/spreadsheets/d/e/2PACX-1vT6aoKk3iHmotqb5_iHggKc_3uAA901xVzwsllmNoOpGgRZ8VAA3TSxK6XreKzg_AUQXIkVX5rqb0Mo/pub?gid=0&range=A2:ZZ&output=csv">下載表格原始資料</a>
           {' '}
-          <Button variant="success" className="btn-sm" onClick={this.downloadSheetResult}>下載表格搜尋結果</Button>
+          下載已篩選的資料：
+          <Button variant="success" className="btn-sm" onClick={this.downloadSheetCSVResult}>CSV</Button>
+          <Button variant="success" className="btn-sm" onClick={this.downloadSheetXLSXResult}>Excel</Button>
         </div>
         <TabulatorTable
           ref={ref => (this.ref = ref)}
