@@ -29,18 +29,26 @@ export default class IndexPage extends React.Component {
   // custom function
   downloadSheetCSVResult = ()=>{
     // tabulator 4.7 override function
-    this.ref.table.setPageSize(this.ref.table.getPageSize())
+    let currentSize = this.ref.table.getPageSize
+    this.ref.table.setPageSize(true)
 
     // actually download the csv
     this.ref.table.download("csv", "result.csv", {}, "active")
+
+    // revert the override function
+    this.ref.table.setPageSize(currentSize)
   }
 
   downloadSheetXLSXResult = ()=>{
     // tabulator 4.7 override function
-    this.ref.table.setPageSize(this.ref.table.getPageSize())
+    let currentSize = this.ref.table.getPageSize
+    this.ref.table.setPageSize(true)
 
     // actually download the xlsx
     this.ref.table.download("xlsx", "result.xlsx", {sheetName:"FilteredResult"}, "active")
+
+    // revert the override function
+    this.ref.table.setPageSize(currentSize)
   }
 
   // Process all the messy stuff here
@@ -185,11 +193,11 @@ export default class IndexPage extends React.Component {
           <strong>你知道嗎？</strong>你可以按住 Shift 鍵來多重排序欄位！
         </Alert>
         <div className="float-right" style={{ padding: "0 0 13px"}}>
-          <a as={Button} className="btn btn-sm btn-info" href="https://docs.google.com/spreadsheets/d/e/2PACX-1vT6aoKk3iHmotqb5_iHggKc_3uAA901xVzwsllmNoOpGgRZ8VAA3TSxK6XreKzg_AUQXIkVX5rqb0Mo/pub?gid=0&range=A2:ZZ&output=csv">下載表格原始資料</a>
-          {' '}
-          下載已篩選的資料：
-          <Button variant="success" className="btn-sm" onClick={this.downloadSheetCSVResult}>CSV</Button>
-          <Button variant="success" className="btn-sm" onClick={this.downloadSheetXLSXResult}>Excel</Button>
+          <div><a as={Button} className="btn btn-sm btn-info float-right" href="https://docs.google.com/spreadsheets/d/e/2PACX-1vT6aoKk3iHmotqb5_iHggKc_3uAA901xVzwsllmNoOpGgRZ8VAA3TSxK6XreKzg_AUQXIkVX5rqb0Mo/pub?gid=0&range=A2:ZZ&output=csv">下載表格原始資料 (CSV)</a></div>
+          <div style={{ display: "inline-block" }}>
+            <Button variant="success" className="btn-sm" onClick={this.downloadSheetCSVResult}>下載已篩選表格資料 (CSV)</Button>
+            <Button variant="success" className="btn-sm" onClick={this.downloadSheetXLSXResult}>下載已篩選表格資料 (Excel)</Button>
+          </div>
         </div>
         <TabulatorTable
           ref={ref => (this.ref = ref)}
