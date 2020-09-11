@@ -16,10 +16,14 @@ import { Alert, Button, Container } from "react-bootstrap"
 // moment.js
 import moment from "moment"
 
+// XLSX
+import XLSX from "xlsx"
+
 export default class IndexPage extends React.Component {
   // Mount components to window
   componentDidMount() {
     window.moment = moment
+    window.XLSX = XLSX
   }
 
   // custom function
