@@ -107,7 +107,7 @@ export default class IndexPage extends React.Component {
       sorter: "date", sorterParams:{format:"YYYY-MM-DD"}
     },  {
       title: "動作", field: "action_zh", width: 121, responsive: 998, 
-      headerFilter: "select", headerFilterPlaceholder: "動作...", headerFilterParams: { values: {
+      headerFilter: "select", headerFilterParams: { values: {
         "": '所有動作',
         "交通": "交通",
         "住宿": "住宿",
@@ -124,10 +124,10 @@ export default class IndexPage extends React.Component {
       }}
     }, {
       title: "分區", field: "sub_district_zh", width: 121, responsive: 999, 
-      headerFilter: "input", headerFilterPlaceholder: "18 區..."
+      headerFilter: "input"
     }, {
       title: "地點", field: "location_zh", width: 300,
-      headerFilter: "input", headerFilterPlaceholder: "關鍵字..."
+      headerFilter: "input"
     }]
 
     // Table display translations
